@@ -244,7 +244,6 @@ public class AquarioTest {
 
     @Test
     public void testPeixeBReproducaoCicloRB() {
-        // Reduzido para 3 colunas para impedir que o segundo Peixe A fuja para (0,3)
         Aquario aq = new Aquario(1, 3, 10, 10, 2, 10);
         aq.adicionarPeixe(new PeixeB(0, 0));
         aq.adicionarPeixe(new PeixeA(0, 1));
@@ -278,6 +277,77 @@ public class AquarioTest {
         assertEquals(0, p.getMovimentosConsecutivos());
     }
 
+    @Test
+    public void testNaoProcessarPeixeDuasVezes() {
+        Aquario aq = new Aquario(1, 3, 10, 10, 10, 10);
+        PeixeA p = new PeixeA(0, 0);
+        aq.adicionarPeixe(p);
+
+        aq.proximaIteracao();
+
+        assertNull(aq.getPeixeEm(0, 0));
+        assertNotNull(aq.getPeixeEm(0, 1));
+        assertNull(aq.getPeixeEm(0, 2), "Peixe não deve mover duas vezes na mesma iteração");
+
+        assertTrue(p.moveuNestaRodada());
+    }
+
+    @Test
+    public void testPeixeBMorreDeFomeAposMover() {
+        Aquario aq = new Aquario(1, 3, 10, 10, 10, 2);
+        PeixeB p = new PeixeB(0, 0);
+        aq.adicionarPeixe(p);
+
+        aq.proximaIteracao();
+        assertNotNull(aq.getPeixeEm(0, 1));
+        assertEquals(1, p.getTurnosSemComer());
+
+        aq.proximaIteracao();
+        assertNull(aq.getPeixeEm(0, 1));
+        assertNull(aq.getPeixeEm(0, 2), "Peixe B deve morrer de fome mesmo se movendo");
+    }
+
+    @Test
+    public void testGettersEstruturais() {
+        Aquario aq = new Aquario(10, 20, 1, 2, 3, 4);
+        assertEquals(10, aq.getLinhas());
+        assertEquals(20, aq.getColunas());
+
+        PeixeA pa = new PeixeA(1, 1);
+        pa.setPosicao(2, 2);
+        pa.setMoveuNestaRodada(true);
+        pa.incrementarTurnosSemMover();
+        pa.zerarTurnosSemMover();
+
+        assertEquals(2, pa.getX());
+        assertEquals(2, pa.getY());
+        assertTrue(pa.moveuNestaRodada());
+
+        PeixeB pb = new PeixeB(3, 3);
+        pb.incrementarContagemComeu();
+        pb.zerarContagemComeu();
+        pb.incrementarTurnosSemComer();
+        pb.zerarTurnosSemComer();
+
+        assertEquals('B', pb.getTipo());
+    }
+
+    @Test
+    public void testPrioridadePeixeBEscolha() {
+        Aquario aq = new Aquario(1, 3, 10, 10, 10, 10);
+        PeixeB b1 = new PeixeB(0, 0);
+        PeixeB b2 = new PeixeB(0, 1);
+        aq.adicionarPeixe(b1);
+        aq.adicionarPeixe(b2);
+
+        aq.proximaIteracao();
+
+        assertEquals(0, b1.getX());
+        assertEquals(0, b1.getY());
+
+        assertTrue(b2.getX() == 0 && b2.getY() == 2, "B2 deve mover para o espaço vazio");
+    }
+
     private Peixe encontrarPeixePorTipo(Aquario aq, char tipo) {
         for(int i=0; i<aq.getLinhas(); i++) {
             for(int j=0; j<aq.getColunas(); j++) {
@@ -302,4 +372,3 @@ public class AquarioTest {
         return x1 != x2 || y1 != y2;
     }
 }
-
