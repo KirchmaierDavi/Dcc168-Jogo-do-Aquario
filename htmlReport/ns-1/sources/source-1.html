@@ -1,0 +1,361 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Aquario</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.dcc168.jogodoaquaria.model</a>
+</div>
+
+<h1>Coverage Summary for Class: Aquario (com.dcc168.jogodoaquaria.model)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Aquario</td>
+<td class="coverageStat">
+  <span class="percent">
+    93,8%
+  </span>
+  <span class="absValue">
+    (15/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88,1%
+  </span>
+  <span class="absValue">
+    (74/84)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95%
+  </span>
+  <span class="absValue">
+    (115/121)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">Aquario$CondicaoVizinho</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    93,8%
+  </span>
+  <span class="absValue">
+    (15/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88,1%
+  </span>
+  <span class="absValue">
+    (74/84)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    95%
+  </span>
+  <span class="absValue">
+    (115/121)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.dcc168.jogodoaquaria.model;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Random;
+&nbsp;
+&nbsp;public class Aquario {
+&nbsp;    private int linhas;
+&nbsp;    private int colunas;
+&nbsp;    private Peixe[][] grade;
+&nbsp;    private int RA, MA, RB, MB;
+&nbsp;    private Random random;
+&nbsp;
+<b class="fc">&nbsp;    public Aquario(int linhas, int colunas, int RA, int MA, int RB, int MB) {</b>
+<b class="fc">&nbsp;        this.linhas = linhas;</b>
+<b class="fc">&nbsp;        this.colunas = colunas;</b>
+<b class="fc">&nbsp;        this.RA = RA;</b>
+<b class="fc">&nbsp;        this.MA = MA;</b>
+<b class="fc">&nbsp;        this.RB = RB;</b>
+<b class="fc">&nbsp;        this.MB = MB;</b>
+<b class="fc">&nbsp;        this.grade = new Peixe[linhas][colunas];</b>
+<b class="fc">&nbsp;        this.random = new Random();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void adicionarPeixe(Peixe peixe) {
+<b class="fc">&nbsp;        if (eValido(peixe.getX(), peixe.getY())) {</b>
+<b class="fc">&nbsp;            grade[peixe.getX()][peixe.getY()] = peixe;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public Peixe getPeixeEm(int x, int y) {
+<b class="pc">&nbsp;        if (eValido(x, y)) {</b>
+<b class="fc">&nbsp;            return grade[x][y];</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return null;</b>
+&nbsp;    }
+&nbsp;
+<b class="fc">&nbsp;    public int getLinhas() { return linhas;}</b>
+<b class="fc">&nbsp;    public int getColunas() { return colunas;}</b>
+&nbsp;
+&nbsp;    private boolean eValido(int x, int y) {
+<b class="fc">&nbsp;        return x &gt;= 0 &amp;&amp; x &lt; linhas &amp;&amp; y &gt;= 0 &amp;&amp; y &lt; colunas;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void proximaIteracao() {
+<b class="fc">&nbsp;        for (int i = 0; i &lt; linhas; i++) {</b>
+<b class="fc">&nbsp;            for (int j = 0; j &lt; colunas; j++) {</b>
+<b class="fc">&nbsp;                if (grade[i][j] != null) {</b>
+<b class="fc">&nbsp;                    grade[i][j].setMoveuNestaRodada(false);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        for (int i = 0; i &lt; linhas; i++) {</b>
+<b class="fc">&nbsp;            for (int j = 0; j &lt; colunas; j++) {</b>
+<b class="fc">&nbsp;                Peixe peixe = grade[i][j];</b>
+<b class="fc">&nbsp;                if (peixe != null &amp;&amp; !peixe.moveuNestaRodada()) {</b>
+<b class="fc">&nbsp;                    processarPeixe(peixe);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private void processarPeixe(Peixe peixe) {
+<b class="fc">&nbsp;        if (peixe instanceof PeixeA) {</b>
+<b class="fc">&nbsp;            processarPeixeA((PeixeA) peixe);</b>
+<b class="pc">&nbsp;        } else if (peixe instanceof PeixeB) {</b>
+<b class="fc">&nbsp;            processarPeixeB((PeixeB) peixe);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private void processarPeixeA(PeixeA peixe) {
+<b class="fc">&nbsp;        List&lt;int[]&gt; vizinhosLivres = getVizinhosLivres(peixe.getX(), peixe.getY());</b>
+&nbsp;
+<b class="fc">&nbsp;        if (!vizinhosLivres.isEmpty()) {</b>
+<b class="fc">&nbsp;            int[] movimento = vizinhosLivres.get(random.nextInt(vizinhosLivres.size()));</b>
+<b class="fc">&nbsp;            int novoX = movimento[0];</b>
+<b class="fc">&nbsp;            int novoY = movimento[1];</b>
+<b class="fc">&nbsp;            int velhoX = peixe.getX();</b>
+<b class="fc">&nbsp;            int velhoY = peixe.getY();</b>
+&nbsp;
+<b class="fc">&nbsp;            grade[velhoX][velhoY] = null;</b>
+<b class="fc">&nbsp;            grade[novoX][novoY] = peixe;</b>
+<b class="fc">&nbsp;            peixe.setPosicao(novoX, novoY);</b>
+<b class="fc">&nbsp;            peixe.setMoveuNestaRodada(true);</b>
+<b class="fc">&nbsp;            peixe.incrementarMovimentosConsecutivos();</b>
+<b class="fc">&nbsp;            peixe.zerarTurnosSemMover();</b>
+&nbsp;
+<b class="fc">&nbsp;             if (peixe.getMovimentosConsecutivos() == RA) {</b>
+<b class="fc">&nbsp;                List&lt;int[]&gt; vizinhosReprod = getVizinhosLivres(peixe.getX(), peixe.getY());</b>
+<b class="pc">&nbsp;                if (!vizinhosReprod.isEmpty()) {</b>
+<b class="fc">&nbsp;                    int[] prole = vizinhosReprod.get(random.nextInt(vizinhosReprod.size()));</b>
+<b class="fc">&nbsp;                    PeixeA filho = new PeixeA(prole[0], prole[1]);</b>
+<b class="fc">&nbsp;                    filho.setMoveuNestaRodada(true);</b>
+<b class="fc">&nbsp;                    adicionarPeixe(filho);</b>
+<b class="fc">&nbsp;                    peixe.zerarMovimentosConsecutivos();</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;        } else {
+<b class="fc">&nbsp;            peixe.setMoveuNestaRodada(true);</b>
+<b class="fc">&nbsp;            peixe.zerarMovimentosConsecutivos();</b>
+<b class="fc">&nbsp;            peixe.incrementarTurnosSemMover();</b>
+&nbsp;
+<b class="fc">&nbsp;            if (peixe.getTurnosSemMover() == MA) {</b>
+<b class="fc">&nbsp;                grade[peixe.getX()][peixe.getY()] = null;</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    private void processarPeixeB(PeixeB peixe) {
+<b class="fc">&nbsp;        List&lt;int[]&gt; vizinhosA = getVizinhosComTipoPeixe(peixe.getX(), peixe.getY(), &#39;A&#39;);</b>
+&nbsp;
+<b class="fc">&nbsp;        if (!vizinhosA.isEmpty()) {</b>
+<b class="fc">&nbsp;            int[] movimento = vizinhosA.get(random.nextInt(vizinhosA.size()));</b>
+<b class="fc">&nbsp;            int novoX = movimento[0];</b>
+<b class="fc">&nbsp;            int novoY = movimento[1];</b>
+<b class="fc">&nbsp;            int velhoX = peixe.getX();</b>
+<b class="fc">&nbsp;            int velhoY = peixe.getY();</b>
+&nbsp;
+<b class="fc">&nbsp;            grade[velhoX][velhoY] = null;</b>
+<b class="fc">&nbsp;            grade[novoX][novoY] = peixe;</b>
+<b class="fc">&nbsp;            peixe.setPosicao(novoX, novoY);</b>
+<b class="fc">&nbsp;            peixe.setMoveuNestaRodada(true);</b>
+&nbsp;
+<b class="fc">&nbsp;            peixe.incrementarContagemComeu();</b>
+<b class="fc">&nbsp;            peixe.zerarTurnosSemComer();</b>
+&nbsp;
+<b class="fc">&nbsp;            if (peixe.getContagemComeu() == RB) {</b>
+<b class="fc">&nbsp;                List&lt;int[]&gt; vizinhosB = getVizinhosComTipoPeixe(peixe.getX(), peixe.getY(), &#39;B&#39;);</b>
+<b class="fc">&nbsp;                if (vizinhosB.isEmpty()) {</b>
+<b class="fc">&nbsp;                   List&lt;int[]&gt; vizinhosLivres = getVizinhosLivres(peixe.getX(), peixe.getY());</b>
+<b class="pc">&nbsp;                   if (!vizinhosLivres.isEmpty()) {</b>
+<b class="fc">&nbsp;                       int[] prole = vizinhosLivres.get(random.nextInt(vizinhosLivres.size()));</b>
+<b class="fc">&nbsp;                       PeixeB filho = new PeixeB(prole[0], prole[1]);</b>
+<b class="fc">&nbsp;                       filho.setMoveuNestaRodada(true);</b>
+<b class="fc">&nbsp;                       adicionarPeixe(filho);</b>
+<b class="fc">&nbsp;                       peixe.zerarContagemComeu();</b>
+&nbsp;                   }
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;        } else {
+<b class="fc">&nbsp;             List&lt;int[]&gt; vizinhosLivres = getVizinhosLivres(peixe.getX(), peixe.getY());</b>
+<b class="fc">&nbsp;             if (!vizinhosLivres.isEmpty()) {</b>
+<b class="fc">&nbsp;                 int[] movimento = vizinhosLivres.get(random.nextInt(vizinhosLivres.size()));</b>
+<b class="fc">&nbsp;                 int novoX = movimento[0];</b>
+<b class="fc">&nbsp;                 int novoY = movimento[1];</b>
+<b class="fc">&nbsp;                 int velhoX = peixe.getX();</b>
+<b class="fc">&nbsp;                 int velhoY = peixe.getY();</b>
+&nbsp;
+<b class="fc">&nbsp;                 grade[velhoX][velhoY] = null;</b>
+<b class="fc">&nbsp;                 grade[novoX][novoY] = peixe;</b>
+<b class="fc">&nbsp;                 peixe.setPosicao(novoX, novoY);</b>
+<b class="fc">&nbsp;                 peixe.setMoveuNestaRodada(true);</b>
+&nbsp;
+<b class="fc">&nbsp;                 peixe.incrementarTurnosSemComer();</b>
+&nbsp;             } else {
+<b class="fc">&nbsp;                 peixe.setMoveuNestaRodada(true);</b>
+<b class="fc">&nbsp;                 peixe.incrementarTurnosSemComer();</b>
+&nbsp;             }
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        if (peixe.getTurnosSemComer() &gt;= MB) {</b>
+<b class="fc">&nbsp;             grade[peixe.getX()][peixe.getY()] = null;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;int[]&gt; getVizinhosLivres(int x, int y) {
+<b class="fc">&nbsp;        return getVizinhosComCondicao(x, y, (nx, ny) -&gt; grade[nx][ny] == null);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;int[]&gt; getVizinhosComTipoPeixe(int x, int y, char tipo) {
+<b class="fc">&nbsp;        return getVizinhosComCondicao(x, y, (nx, ny) -&gt; grade[nx][ny] != null &amp;&amp; grade[nx][ny].getTipo() == tipo);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @FunctionalInterface
+&nbsp;    interface CondicaoVizinho {
+&nbsp;        boolean test(int nx, int ny);
+&nbsp;    }
+&nbsp;
+&nbsp;    private List&lt;int[]&gt; getVizinhosComCondicao(int x, int y, CondicaoVizinho condicao) {
+<b class="fc">&nbsp;        List&lt;int[]&gt; lista = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        int[] dx = {-1, -1, -1, 0, 0, 1, 1, 1};</b>
+<b class="fc">&nbsp;        int[] dy = {-1, 0, 1, -1, 1, -1, 0, 1};</b>
+&nbsp;
+<b class="fc">&nbsp;        for (int k = 0; k &lt; 8; k++) {</b>
+<b class="fc">&nbsp;            int nx = x + dx[k];</b>
+<b class="fc">&nbsp;            int ny = y + dy[k];</b>
+<b class="fc">&nbsp;            if (eValido(nx, ny) &amp;&amp; condicao.test(nx, ny)) {</b>
+<b class="fc">&nbsp;                lista.add(new int[]{nx, ny});</b>
+&nbsp;            }
+&nbsp;        }
+<b class="fc">&nbsp;        return lista;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int contarPeixeA() {
+<b class="fc">&nbsp;        int contagem = 0;</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; linhas; i++) {</b>
+<b class="fc">&nbsp;             for (int j = 0; j &lt; colunas; j++) {</b>
+<b class="fc">&nbsp;                 if (grade[i][j] != null &amp;&amp; grade[i][j].getTipo() == &#39;A&#39;) contagem++;</b>
+&nbsp;             }
+&nbsp;        }
+<b class="fc">&nbsp;        return contagem;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int contarPeixeB() {
+<b class="fc">&nbsp;        int contagem = 0;</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; linhas; i++) {</b>
+<b class="fc">&nbsp;             for (int j = 0; j &lt; colunas; j++) {</b>
+<b class="fc">&nbsp;                 if (grade[i][j] != null &amp;&amp; grade[i][j].getTipo() == &#39;B&#39;) contagem++;</b>
+&nbsp;             }
+&nbsp;        }
+<b class="fc">&nbsp;        return contagem;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;      public void imprimirGrade() {
+<b class="nc">&nbsp;        for (int i = 0; i &lt; linhas; i++) {</b>
+<b class="nc">&nbsp;             for (int j = 0; j &lt; colunas; j++) {</b>
+<b class="nc">&nbsp;                 if (grade[i][j] == null) System.out.print(&quot;. &quot;);</b>
+<b class="nc">&nbsp;                 else System.out.print(grade[i][j].getTipo() + &quot; &quot;);</b>
+&nbsp;             }
+<b class="nc">&nbsp;             System.out.println();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-01-07 21:43</div>
+</div>
+</body>
+</html>
